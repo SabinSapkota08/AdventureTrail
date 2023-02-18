@@ -3,10 +3,11 @@ import 'dart:convert';
 import 'package:fyp/model/product_model.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:fyp/utils/constants.dart';
 
 class ProductController extends GetxController {
   Future<Products?> get() async {
-    var url = Uri.parse('http://localhost/adventureTrail/public/api/products');
+    var url = Uri.parse('$baseUrl/public/api/products');  
     var response = await http.get(
       url,
       headers: {
