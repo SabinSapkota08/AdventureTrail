@@ -1,20 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fyp/model/adventure_packages_model.dart';
 
-class AdPostAppBar extends StatefulWidget {
-  AdPostAppBar({Key? key, required this.adPackage}) : super(key: key);
-  AdPackage adPackage;
+class AtPostAppBar extends StatefulWidget {
+  AtPostAppBar({Key? key}) : super(key: key);
 
   @override
-  State<AdPostAppBar> createState() => _AdPostAppBarState();
+  State<AtPostAppBar> createState() => _AtPostAppBarState();
 }
 
-class _AdPostAppBarState extends State<AdPostAppBar> {
-  void initState() {
-    // darkMode = true;
-    super.initState();
-  }
-
+class _AtPostAppBarState extends State<AtPostAppBar> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -74,6 +68,7 @@ class _AdPostAppBarState extends State<AdPostAppBar> {
   }
 
   bool isFavourite = false;
+
   changeFavourite() {
     isFavourite = !isFavourite;
     setState(() {});

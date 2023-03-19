@@ -1,12 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fyp/model/adventure_packages_model.dart';
+import 'package:fyp/utils/constants.dart';
 
-import '../utils/constants.dart';
+import '../model/adventure_tickets_model.dart';
 
-class AdPostBottomBar extends StatelessWidget {
-  AdPostBottomBar({Key? key, required this.adPackage}) : super(key: key);
-  AdPackage adPackage;
-
+class AtPostBottomBar extends StatelessWidget {
+  AtPostBottomBar({Key? key, required this.adTicket}) : super(key: key);
+  AdTicket adTicket;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -28,7 +28,7 @@ class AdPostBottomBar extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "${adPackage.name}",
+                      "${adTicket.name}",
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 24,
@@ -51,33 +51,28 @@ class AdPostBottomBar extends StatelessWidget {
                 ),
                 SizedBox(height: 25),
                 Text(
-                  "${adPackage.description} ${adPackage.description_img?.length}",
+                  "${adTicket.description}",
                   style: TextStyle(fontSize: 16, color: Colors.black),
                   textAlign: TextAlign.justify,
                 ),
                 SizedBox(height: 20),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: 80,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: (adPackage.description_img ?? []).map((e) {
-                      return Padding(
-                        padding: EdgeInsets.only(right: 5),
-                        child: Expanded(
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(15),
-                            child: Image.network(
-                              "$baseUrl/public/$e",
-                              fit: BoxFit.cover,
-                              width: 120,
-                              height: 90,
-                            ),
+                Row(
+                  children: (adTicket.description_img ?? []).map((e) {
+                    return Padding(
+                      padding: EdgeInsets.only(right: 5),
+                      child: Expanded(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(15),
+                          child: Image.network(
+                            "${baseUrl}/public/${e}",
+                            fit: BoxFit.cover,
+                            width: 120,
+                            height: 90,
                           ),
                         ),
-                      );
-                    }).toList(),
-                  ),
+                      ),
+                    );
+                  }).toList(),
                 ),
                 SizedBox(
                   height: 15,

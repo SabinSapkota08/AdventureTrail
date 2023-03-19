@@ -1,10 +1,13 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp/controller/product_controller.dart';
 import 'package:fyp/model/product_model.dart';
+import 'package:fyp/utils/constants.dart';
 import 'package:fyp/view/detail_page.dart';
+//import 'package:get/get_core/src/get_main.dart';
+import 'package:fyp/view/product_category_model.dart';
 import 'package:fyp/view/search.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 import 'adventure_package.dart';
 import 'adventure_tickets.dart';
@@ -178,41 +181,56 @@ class _HomePageState extends State<HomePage> {
                           return InkWell(
                             onTap: () {},
                             child: Container(
-                              width: 160,
-                              padding: EdgeInsets.all(20),
-                              margin: EdgeInsets.only(left: 15),
-                              decoration: BoxDecoration(
-                                color: Colors.black,
-                                borderRadius: BorderRadius.circular(15),
-                                image: DecorationImage(
-                                    image: AssetImage("assets/images/hike.png"),
-                                    fit: BoxFit.cover,
-                                    opacity: 0.7),
+                              child: CarouselSlider(
+                                options: CarouselOptions(
+                                  aspectRatio: 1.5,
+                                  viewportFraction: 0.9,
+                                  enlargeStrategy:
+                                      CenterPageEnlargeStrategy.height,
+                                  // scrollDirection: Axis.vertical,
+                                  autoPlay: true,
+                                ),
+                                items: Category.categories
+                                    .map((category) =>
+                                        ProductCarasoul(category: category))
+                                    .toList(),
                               ),
-                              child: Column(
-                                children: [
-                                  Container(
-                                    alignment: Alignment.topRight,
-                                    child: Icon(
-                                      Icons.bookmark_add_outlined,
-                                      color: Colors.white,
-                                      size: 30,
-                                    ),
-                                  ),
-                                  Spacer(),
-                                  Container(
-                                    alignment: Alignment.bottomLeft,
-                                    child: Text(
-                                      "Trekking Bag",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
+
+                              // width: 160,
+                              // padding: EdgeInsets.all(20),
+                              // margin: EdgeInsets.only(left: 15),
+                              // decoration: BoxDecoration(
+                              //   color: Colors.black,
+                              //   borderRadius: BorderRadius.circular(15),
+                              //   image: DecorationImage(
+                              //       image: AssetImage("assets/images/hike.png"),
+                              //       fit: BoxFit.cover,
+                              //       opacity: 0.7),
+                              // ),
+                              // child: Column(
+                              //   children: [
+                              //     Container(
+                              //       alignment: Alignment.topRight,
+                              //       child: Icon(
+                              //         Icons.bookmark_add_outlined,
+                              //         color: Colors.white,
+                              //         size: 30,
+                              //       ),
+                              //     ),
+                              //     Spacer(),
+                              //     Container(
+                              //       alignment: Alignment.bottomLeft,
+                              //       child: Text(
+                              //         "Trekking Bag",
+                              //         style: TextStyle(
+                              //           color: Colors.white,
+                              //           fontSize: 18,
+                              //           fontWeight: FontWeight.w600,
+                              //         ),
+                              //       ),
+                              //     )
+                              //   ],
+                              // ),
                             ),
                           );
                         },
@@ -234,7 +252,7 @@ class _HomePageState extends State<HomePage> {
                   TextButton(
                     onPressed: () {},
                     child: const Text(
-                      "See more",
+                      "See more ",
                       style: TextStyle(
                         fontWeight: FontWeight.normal,
                         fontSize: 12.83,
@@ -268,7 +286,7 @@ class _HomePageState extends State<HomePage> {
                                       image: DecorationImage(
                                           fit: BoxFit.fill,
                                           image: NetworkImage(
-                                              product.image ?? ""))),
+                                              "$baseUrl/public/${product.image}"))),
                                 ),
                                 SizedBox(
                                   width: 50,
@@ -277,7 +295,7 @@ class _HomePageState extends State<HomePage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "${product.name}",
+                                      "${product.name} ",
                                       style: TextStyle(
                                         fontWeight: FontWeight.w600,
                                         fontSize: 17.1,
@@ -309,38 +327,57 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
+    );
+  }
+}
 
-      // appBar: AppBar(
-      //   title: const Text(
-      //     "Adventure Trail",
-      //   ),
-      //   actions: [
-      //     IconButton(
-      //       onPressed: () {
-      //         // method to show the search bar
-      //         showSearch(
-      //             context: context,
-      //             // delegate to customize the search bar
-      //             delegate: CustomSearchDelegate()
-      //         );
-      //       },
-      //       icon: const Icon(Icons.search),
-      //     )
-      //   ],
-      // ),
+class ProductCarasoul extends StatelessWidget {
+  final Category category;
+  const ProductCarasoul({
+    required this.category,
+  });
 
-      // body: Center(
-      //   child: Row(
-      //     mainAxisAlignment: MainAxisAlignment.center,
-      //     children: <Widget>[
-      //       TextButton(onPressed:() {
-      //
-      //       }, , child: Text("Equipments") ),
-      //
-      //     ],
-      //   ),
-      //
-      // ),
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Container(
+        margin: EdgeInsets.all(5.0),
+        child: ClipRRect(
+            borderRadius: BorderRadius.all(Radius.circular(5.0)),
+            child: Stack(
+              children: <Widget>[
+                Image.network(category.imageUrl,
+                    fit: BoxFit.cover, width: 1000.0),
+                Positioned(
+                  bottom: 0.0,
+                  left: 0.0,
+                  right: 0.0,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Color.fromARGB(200, 0, 0, 0),
+                          Color.fromARGB(0, 0, 0, 0)
+                        ],
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                      ),
+                    ),
+                    padding:
+                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                    child: Text(
+                      category.name,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            )),
+      ),
     );
   }
 }

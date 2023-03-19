@@ -2,12 +2,17 @@
 import 'package:es_drawer_controller/main.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp/view/homepage.dart';
+import 'package:fyp/view/order_page.dart';
 import 'package:fyp/view/profile_page.dart';
+
+import 'cart_page.dart';
 
 enum eDrawerIndex {
   diDivider, // This is to be used when ever you need a divider
   diHome,
   diProfile,
+  diCart,
+  diOrder,
   diShare,
   diRateApp,
   diAboutUS,
@@ -28,6 +33,19 @@ class MainNavigation extends StatefulWidget {
         index: eDrawerIndex.diProfile,
         labelName: 'My Profile',
         iconData: Icons.person),
+
+    const ESDrawerItem(
+        type: eDrawerItemType.ditMenu,
+        index: eDrawerIndex.diCart,
+        labelName: 'Cart',
+        iconData: Icons.add_shopping_cart_outlined),
+
+    const ESDrawerItem(
+        type: eDrawerItemType.ditMenu,
+        index: eDrawerIndex.diOrder,
+        labelName: 'Order',
+        iconData: Icons.shopping_cart_sharp),
+
     const ESDrawerItem(
         type: eDrawerItemType.ditDivider,
         index: eDrawerIndex.diDivider), // Add a divider here
@@ -83,6 +101,13 @@ class _MainNavigationState extends State<MainNavigation> {
         break;
       case eDrawerIndex.diProfile:
         setState(() => screenView = ProfilePage());
+        break;
+      case eDrawerIndex.diCart:
+        setState(() => screenView = CartPage());
+        break;
+
+      case eDrawerIndex.diOrder:
+        setState(() => screenView = OrderPage());
         break;
       case eDrawerIndex.diShare:
         setState(() => screenView = HomePage());

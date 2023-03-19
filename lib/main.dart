@@ -1,17 +1,22 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:fyp/state/order_controller.dart';
 //import 'package:fyp/view/home.dart';
 import 'package:fyp/view/homepage.dart';
 import 'package:fyp/view/login.dart';
 import 'package:fyp/view/signup.dart';
 import 'package:fyp/view/splash.dart';
+import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 //import 'package:dlogin/signup.dart';
 //import 'package:dlogin/homepage.dart';
 
 void main() {
   HttpOverrides.global = MyHttpOverrides();
+
+  Get.lazyPut(() => OrderController());
+  ;
   runApp(const MyApp());
 }
 
@@ -22,6 +27,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,

@@ -1,6 +1,9 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp/controller/adventure_packages_controller.dart';
 import 'package:fyp/model/adventure_packages_model.dart';
+import 'package:fyp/utils/constants.dart';
+import 'package:fyp/view/adPackage_category_model.dart';
 
 import 'ad_post_screen.dart';
 
@@ -61,43 +64,19 @@ class _AdventurePackagePageState extends State<AdventurePackagePage> {
                             );
                           },
                           child: Container(
-                            width: 160,
-                            padding: EdgeInsets.all(20),
-                            margin: EdgeInsets.only(left: 15),
-                            decoration: BoxDecoration(
-                              color: Colors.black,
-                              borderRadius: BorderRadius.circular(15),
-                              image: DecorationImage(
-                                  image: AssetImage(
-                                      "assets/images/background.png"),
-                                  fit: BoxFit.cover,
-                                  opacity: 0.7),
+                              child: CarouselSlider(
+                            options: CarouselOptions(
+                              aspectRatio: 1.5,
+                              viewportFraction: 0.9,
+                              enlargeStrategy: CenterPageEnlargeStrategy.height,
+                              // scrollDirection: Axis.vertical,
+                              autoPlay: true,
                             ),
-                            child: Column(
-                              children: [
-                                Container(
-                                  alignment: Alignment.topRight,
-                                  child: Icon(
-                                    Icons.bookmark_add_outlined,
-                                    color: Colors.white,
-                                    size: 30,
-                                  ),
-                                ),
-                                Spacer(),
-                                Container(
-                                  alignment: Alignment.bottomLeft,
-                                  child: Text(
-                                    "Machapuchare Trek",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
+                            items: Category.categories
+                                .map((category) =>
+                                    AdPackageCarasoul(category: category))
+                                .toList(),
+                          )),
                         );
                       },
                     ),
@@ -169,7 +148,7 @@ class _AdventurePackagePageState extends State<AdventurePackagePage> {
                                 borderRadius: BorderRadius.circular(15),
                                 image: DecorationImage(
                                   image: NetworkImage(
-                                      "https://www.thirdrockadventures.com/assets-back/images/trip/mardi-himal-trek.jpggTW.jpg",
+                                      "$baseUrl/public/${packages[index].image}",
                                       scale: 2),
                                   fit: BoxFit.cover,
                                   opacity: 0.8,
@@ -203,15 +182,11 @@ class _AdventurePackagePageState extends State<AdventurePackagePage> {
                       ),
                       Row(
                         children: [
-                          Icon(
-                            Icons.star,
-                            color: Colors.amber,
-                            size: 20,
-                          ),
                           Text(
-                            "3.5",
+                            "Rs.${packages[index].price}",
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
+                              color: Colors.blue,
                             ),
                           )
                         ],
@@ -228,169 +203,53 @@ class _AdventurePackagePageState extends State<AdventurePackagePage> {
   }
 }
 
-//child: Scaffold(
-//  backgroundColor: Colors.white,
-// appBar: AppBar(
-//   backgroundColor: Colors.transparent,
-//   title: Text(""),
-// ),
-// body: SingleChildScrollView(
-//   child: Container(
-//     // decoration: BoxDecoration(
-//     //   image: DecorationImage(
-//     //     image: AssetImage("assets/images/background.png"),
-//     //     fit: BoxFit.cover,
-//     //     opacity: 0.7,
-//     //   ),
-//     // ),
-//     margin: EdgeInsets.only(top: 30),
-//     padding: const EdgeInsets.symmetric(vertical: 27, horizontal: 16),
-//     child: Column(
-//       crossAxisAlignment: CrossAxisAlignment.start,
-//       children: [
-//         SizedBox(
-//           height: 2,
-//         ),
-//
-//
-//         Row(
-//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//           children: [
-//             const Text(
-//               "Most Popular",
-//               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-//             ),
-//             TextButton(
-//               onPressed: () {},
-//               child: const Text(
-//                 "See more",
-//                 style: TextStyle(
-//                   fontWeight: FontWeight.normal,
-//                   fontSize: 12.83,
-//                 ),
-//               ),
-//             )
-//           ],
-//         ),
-//
-//         Stack(
-//           children: [
-//             Image.network(
-//               "https://images.pexels.com/photos/15286/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-//             ),
-//             Positioned.fill(
-//                 child: Align(
-//               alignment: Alignment.centerLeft,
-//               child: Text("Annapurna himal trek",
-//                   style: TextStyle(color: Colors.white, fontSize: 30)),
-//             )),
-//             Positioned.fill(
-//                 child: Align(
-//               alignment: Alignment.bottomLeft,
-//               child: Text("Nrs.45",
-//                   style: TextStyle(color: Colors.white, fontSize: 18)),
-//             )),
-//           ],
-//         ),
-//
-//         Container(
-//           height: 290,
-//           margin: EdgeInsets.only(top: 10),
-//           decoration: BoxDecoration(
-//             color: Colors.red,
-//             borderRadius: BorderRadius.circular(18),
-//             image: DecorationImage(
-//               fit: BoxFit.fill,
-//               image: NetworkImage(
-//                   "https://images.pexels.com/photos/15286/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"),
-//             ),
-//           ),
-//         ),
-//
-//         Row(
-//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//           children: [
-//             Text(
-//               "Mardi Himal Trek",
-//               style: TextStyle(
-//                 fontWeight: FontWeight.w600,
-//                 fontSize: 17.1,
-//               ),
-//             ),
-//             Text(
-//               "Rs. 2.5..00 / Day",
-//               style: TextStyle(
-//                 fontWeight: FontWeight.normal,
-//                 color: Color(0xfff0A8ED9),
-//                 fontSize: 12.83,
-//               ),
-//             )
-//           ],
-//         ),
-//
-//         Row(
-//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//           children: [
-//             Text(
-//               "This is small cozy tent for two peoples. ",
-//               style: TextStyle(
-//                 fontWeight: FontWeight.normal,
-//                 fontSize: 12.83,
-//               ),
-//             ),
-//             ElevatedButton(onPressed: () {}, child: Text("Book"))
-//           ],
-//         ),
-//         Container(
-//           height: 290,
-//           margin: EdgeInsets.only(top: 10),
-//           decoration: BoxDecoration(
-//               color: Colors.red,
-//               borderRadius: BorderRadius.circular(18),
-//               image: DecorationImage(
-//                   fit: BoxFit.fill,
-//                   image: NetworkImage(
-//                       "https://images.pexels.com/photos/15286/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"))),
-//         ),
-//
-//         Row(
-//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//           children: [
-//             Text(
-//               "Mardi Himal Trek",
-//               style: TextStyle(
-//                 fontWeight: FontWeight.w600,
-//                 fontSize: 17.1,
-//               ),
-//             ),
-//             Text(
-//               "Rs. 2.5..00 / Day",
-//               style: TextStyle(
-//                 fontWeight: FontWeight.normal,
-//                 color: Color(0xfff0A8ED9),
-//                 fontSize: 12.83,
-//               ),
-//             )
-//           ],
-//         ),
-//
-//         Row(
-//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//           children: [
-//             Text(
-//               "This is small cozy tent for two peoples. ",
-//               style: TextStyle(
-//                 fontWeight: FontWeight.normal,
-//                 fontSize: 12.83,
-//               ),
-//             ),
-//             ElevatedButton(onPressed: () {}, child: Text("Book"))
-//           ],
-//         ),
-//       ],
-//     ),
-//   ),
-// ),
+class AdPackageCarasoul extends StatelessWidget {
+  final Category category;
+  const AdPackageCarasoul({
+    required this.category,
+  });
 
-//);
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Container(
+        margin: EdgeInsets.all(5.0),
+        child: ClipRRect(
+            borderRadius: BorderRadius.all(Radius.circular(5.0)),
+            child: Stack(
+              children: <Widget>[
+                Image.network(category.imageUrl,
+                    fit: BoxFit.cover, width: 1000.0),
+                Positioned(
+                  bottom: 0.0,
+                  left: 0.0,
+                  right: 0.0,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Color.fromARGB(200, 0, 0, 0),
+                          Color.fromARGB(0, 0, 0, 0)
+                        ],
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                      ),
+                    ),
+                    padding:
+                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                    child: Text(
+                      category.name,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            )),
+      ),
+    );
+  }
+}

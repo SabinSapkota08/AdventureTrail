@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class AdventurePackage {
   int? currentPage;
   List<AdPackage>? packages;
@@ -70,6 +72,7 @@ class AdPackage {
   int? id;
   String? name;
   String? description;
+  List? description_img = [];
   int? price;
   int? quantity;
   String? category;
@@ -86,15 +89,20 @@ class AdPackage {
       this.category,
       this.image,
       this.createdAt,
+      this.description_img,
       this.updatedAt});
 
   AdPackage.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     description = json['description'];
+    description_img = json['description_img'] != null
+        ? jsonDecode(json['description_img']) as List
+        : null;
+    ;
     price = json['price'];
     quantity = json['quantity'];
-    category = json['category'];
+    category = json['category'].toString();
     image = json['image'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];

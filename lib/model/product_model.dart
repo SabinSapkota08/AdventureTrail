@@ -76,6 +76,7 @@ class Product {
   String? offerFrom;
   int? offerPrice;
   int? mrp;
+  int? selectedQuantity;
   int? quantity;
   int? category;
   String? createdAt;
@@ -86,6 +87,7 @@ class Product {
       this.name,
       this.desc,
       this.shortDescription,
+      this.selectedQuantity = 1,
       this.image,
       this.offerTo,
       this.offerFrom,
@@ -105,11 +107,13 @@ class Product {
     offerTo = json['offer_to'];
     offerFrom = json['offer_from'];
     offerPrice = json['offer_price'];
+
     mrp = json['mrp'];
     quantity = json['quantity'];
     category = json['category'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
+    selectedQuantity = 1;
   }
 
   Map<String, dynamic> toJson() {
