@@ -9,13 +9,14 @@ import 'package:fyp/view/signup.dart';
 import 'package:fyp/view/splash.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:khalti_flutter/khalti_flutter.dart';
 //import 'package:dlogin/signup.dart';
 //import 'package:dlogin/homepage.dart';
 
 void main() {
   HttpOverrides.global = MyHttpOverrides();
 
-  Get.lazyPut(() => OrderController());
+  Get.put(ProductStateController());
   ;
   runApp(const MyApp());
 }
@@ -26,20 +27,26 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        primaryColor: Colors.blue,
-      ),
-      home: const SplashPage(),
-      routes: {
-        'signup': (context) => const SignUpPage(),
-        'login': (context) => const LoginPage(),
-        '/homepage': (context) => const HomePage(),
-      },
-    );
+    return KhaltiScope(
+        publicKey: "test_public_key_a5131ab1093d404b83b9416c1b18e00e",
+        builder: (context, navigatorKey) {
+          return GetMaterialApp(
+            navigatorKey: navigatorKey,
+            supportedLocales: const [
+              Locale('en', 'US'),
+              Locale('ne', 'NP'),
+            ],
+            localizationsDelegates: const [
+              KhaltiLocalizations.delegate,
+            ],
+            home: const SplashPage(),
+            routes: {
+              'signup': (context) => const SignUpPage(),
+              'login': (context) => const LoginPage(),
+              '/homepage': (context) => const HomePage(),
+            },
+          );
+        });
   }
 }
 

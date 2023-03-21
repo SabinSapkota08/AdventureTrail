@@ -14,7 +14,7 @@ class ProductDetailPage extends StatelessWidget {
         appBar: AppBar(),
         body: Container(
           padding: EdgeInsets.symmetric(horizontal: 10),
-          child: GetBuilder<OrderController>(builder: (orderController) {
+          child: GetBuilder<ProductStateController>(builder: (orderController) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

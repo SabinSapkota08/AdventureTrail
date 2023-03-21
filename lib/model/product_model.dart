@@ -126,11 +126,13 @@ class Product {
     data['offer_to'] = this.offerTo;
     data['offer_from'] = this.offerFrom;
     data['offer_price'] = this.offerPrice;
-    data['mrp'] = this.mrp;
+    data['product_amount'] = this.mrp;
     data['quantity'] = this.quantity;
     data['category'] = this.category;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
+    data['product_quantity'] = this.quantity;
+    data['product_amount'] = this.quantity;
     return data;
   }
 }

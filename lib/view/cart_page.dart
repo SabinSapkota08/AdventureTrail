@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp/state/order_controller.dart';
+import 'package:fyp/view/checkout_page.dart';
 import 'package:get/get.dart';
 
 class CartPage extends StatefulWidget {
@@ -11,13 +12,19 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
-  final controller = Get.find<OrderController>();
+  final controller = Get.find<ProductStateController>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton:
-          ElevatedButton(onPressed: () {}, child: Text("Check out")),
+      floatingActionButton: ElevatedButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => CheckoutPage()),
+            );
+          },
+          child: Text("Check out")),
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
