@@ -66,9 +66,9 @@ class _AdventurePackagePageState extends State<AdventurePackagePage> {
                           child: Container(
                               child: CarouselSlider(
                             options: CarouselOptions(
-                              aspectRatio: 1.5,
+                              aspectRatio: 4,
                               viewportFraction: 0.9,
-                              enlargeStrategy: CenterPageEnlargeStrategy.height,
+                              enlargeStrategy: CenterPageEnlargeStrategy.zoom,
                               // scrollDirection: Axis.vertical,
                               autoPlay: true,
                             ),

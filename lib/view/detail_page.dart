@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:fyp/model/product_model.dart';
 import 'package:fyp/state/order_controller.dart';
 import 'package:fyp/utils/constants.dart';
+import 'package:fyp/view/product_checkout_page.dart';
 import 'package:get/get.dart';
 
 class ProductDetailPage extends StatelessWidget {
   ProductDetailPage({super.key, required this.product});
-
+  final orderController = Get.find<ProductStateController>();
   Product product;
   @override
   Widget build(BuildContext context) {
@@ -98,7 +99,7 @@ class ProductDetailPage extends StatelessWidget {
                               width: 29.93,
                               child: Center(
                                   child: Icon(
-                                Icons.call,
+                                Icons.favorite_border_outlined,
                                 size: 12.83,
                                 color: Colors.white,
                               )),
@@ -182,19 +183,30 @@ class ProductDetailPage extends StatelessWidget {
                 ],
               ),
               Container(
-                decoration: BoxDecoration(
-                    color: Color(0xfff0A8ED9),
-                    borderRadius: BorderRadius.circular(10.69)),
-                padding:
-                    EdgeInsets.symmetric(horizontal: 25.66, vertical: 12.83),
-                child: Text(
-                  "Order Now",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 17.1,
-                      color: Colors.white),
+                // decoration: BoxDecoration(
+                //     color: Color(0xfff0A8ED9),
+                //     borderRadius: BorderRadius.circular(10.69)),
+                // padding:
+                //     EdgeInsets.symmetric(horizontal: 25.66, vertical: 12.83),
+                // // child: TextButton(
+                // //   "Order Now",
+                // //   style: TextStyle(
+                // //       fontWeight: FontWeight.w600,
+                // //       fontSize: 17.1,
+                // //       color: Colors.white),
+                // // ),
+                child: ElevatedButton(
+                  onPressed: () {
+                    orderController.cart.value.clear();
+                    orderController.cart.value.add(product);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ProductCheckoutPage()));
+                  },
+                  child: Text("Order now"),
                 ),
-              )
+              ),
             ],
           ),
         ));
