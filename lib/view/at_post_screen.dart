@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:fyp/model/product_model.dart';
+import 'package:fyp/utils/constants.dart';
 import 'package:fyp/view/at_post_app_bar.dart';
 import 'package:fyp/view/at_post_bottom_bar.dart';
-
-import '../model/adventure_tickets_model.dart';
 
 class AtPostScreen extends StatelessWidget {
   AtPostScreen({Key? key, required this.adTicket}) : super(key: key);
 
-  AdTicket adTicket;
+  Product adTicket;
 
   //required this.atTicket
 
@@ -18,7 +18,8 @@ class AtPostScreen extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage("assets/images/background.png"),
+          image:
+              NetworkImage("$baseUrl/public/${adTicket.description_img?.last}"),
           fit: BoxFit.cover,
           opacity: 0.7,
         ),
@@ -28,8 +29,8 @@ class AtPostScreen extends StatelessWidget {
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(90),
           child: AtPostAppBar(
-              //atTicket: atTicket,
-              ),
+            adTicket: adTicket,
+          ),
         ),
         bottomNavigationBar: AtPostBottomBar(
           adTicket: adTicket,

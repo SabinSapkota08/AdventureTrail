@@ -5,10 +5,17 @@ import 'package:fyp/utils/constants.dart';
 import 'package:fyp/view/product_checkout_page.dart';
 import 'package:get/get.dart';
 
-class ProductDetailPage extends StatelessWidget {
+class ProductDetailPage extends StatefulWidget {
   ProductDetailPage({super.key, required this.product});
-  final orderController = Get.find<ProductStateController>();
   Product product;
+
+  @override
+  State<ProductDetailPage> createState() => _ProductDetailPageState();
+}
+
+class _ProductDetailPageState extends State<ProductDetailPage> {
+  final orderController = Get.find<ProductStateController>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +38,7 @@ class ProductDetailPage extends StatelessWidget {
                       image: DecorationImage(
                           fit: BoxFit.fill,
                           image: NetworkImage(
-                              "$baseUrl/public/${product.image}"))),
+                              "$baseUrl/public/${widget.product.image}"))),
                 ),
                 SizedBox(
                   height: 30,
@@ -47,7 +54,7 @@ class ProductDetailPage extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "${product.desc}",
+                      "${widget.product.desc}",
                       style: TextStyle(
                         fontWeight: FontWeight.normal,
                         fontSize: 12.83,
@@ -93,15 +100,32 @@ class ProductDetailPage extends StatelessWidget {
                             ],
                           ),
                           GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              if (orderController.favourite.value
+                                  .where((element) =>
+                                      element.id == widget.product.id)
+                                  .isEmpty) {
+                                orderController.favourite.value
+                                    .add(widget.product);
+                              } else {
+                                orderController.favourite.value
+                                    .remove(widget.product);
+                              }
+                              setState(() {});
+                            },
                             child: Container(
                               height: 29.93,
                               width: 29.93,
                               child: Center(
                                   child: Icon(
-                                Icons.favorite_border_outlined,
+                                Icons.favorite,
                                 size: 12.83,
-                                color: Colors.white,
+                                color: orderController.favourite.value
+                                        .where((element) =>
+                                            element.id == widget.product.id)
+                                        .isEmpty
+                                    ? Colors.white
+                                    : Colors.red,
                               )),
                               decoration: BoxDecoration(
                                 color: Color(0xfff0A8ED9).withOpacity(0.5),
@@ -114,16 +138,18 @@ class ProductDetailPage extends StatelessWidget {
                       trailing: GestureDetector(
                         onTap: () {
                           if (orderController.cart.value
-                              .where((element) => element.id == product.id)
+                              .where(
+                                  (element) => element.id == widget.product.id)
                               .isEmpty) {
-                            orderController.cart.value.add(product);
+                            orderController.cart.value.add(widget.product);
                           } else {
                             orderController.cart.value
-                                .where((element) => element.id == product.id)
+                                .where((element) =>
+                                    element.id == widget.product.id)
                                 .first
                                 .selectedQuantity = (orderController.cart.value
                                         .where((element) =>
-                                            element.id == product.id)
+                                            element.id == widget.product.id)
                                         .first
                                         .selectedQuantity ??
                                     0) +
@@ -134,15 +160,17 @@ class ProductDetailPage extends StatelessWidget {
                           height: 29.93,
                           width: 29.93,
                           child: Center(
-                              child: Icon(
-                            orderController.cart.value
-                                    .where((element) => element == product)
-                                    .isEmpty
-                                ? Icons.add_shopping_cart
-                                : Icons.shopping_cart,
-                            size: 12.83,
-                            color: Colors.white,
-                          )),
+                            child: Icon(
+                              orderController.cart.value
+                                      .where((element) =>
+                                          element == widget.product)
+                                      .isEmpty
+                                  ? Icons.add_shopping_cart
+                                  : Icons.shopping_cart,
+                              size: 12.83,
+                              color: Colors.white,
+                            ),
+                          ),
                           decoration: BoxDecoration(
                             color: Color(0xfff0A8ED9).withOpacity(0.5),
                             borderRadius: BorderRadius.circular(5.34),
@@ -174,7 +202,7 @@ class ProductDetailPage extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    "Rs.${product.mrp}",
+                    "Rs.${widget.product.mrp}",
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 17.1,
@@ -198,7 +226,7 @@ class ProductDetailPage extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     orderController.cart.value.clear();
-                    orderController.cart.value.add(product);
+                    orderController.cart.value.add(widget.product);
                     Navigator.push(
                         context,
                         MaterialPageRoute(

@@ -4,6 +4,8 @@ import 'package:fyp/state/order_controller.dart';
 import 'package:fyp/view/checkout_page.dart';
 import 'package:get/get.dart';
 
+import '../utils/constants.dart';
+
 class CartPage extends StatefulWidget {
   CartPage({Key? key}) : super(key: key);
 
@@ -61,7 +63,7 @@ class _CartPageState extends State<CartPage> {
         child: ListView(
           children: controller.cart.value.map((product) {
             return Container(
-              height: 120,
+              height: 150,
               margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
               padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
@@ -79,7 +81,7 @@ class _CartPageState extends State<CartPage> {
                     height: 70,
                     width: 70,
                     margin: EdgeInsets.only(right: 15),
-                    child: Image.network("${product.image}"),
+                    child: Image.network("$baseUrl/public/${product.image}"),
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 10),
@@ -96,7 +98,7 @@ class _CartPageState extends State<CartPage> {
                           ),
                         ),
                         Text(
-                          "Npr.50",
+                          "Npr.${product.mrp}",
                           style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -112,28 +114,17 @@ class _CartPageState extends State<CartPage> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        IconButton(
-                          onPressed: () {
-                            controller.cart.value.remove(product);
-                            setState(() {});
-                          },
-                          icon: Icon(Icons.delete),
-                        ),
-                        Row(
+                        // IconButton(
+                        //   onPressed: () {
+                        //     controller.cart.value.remove(product);
+                        //     setState(() {});
+                        //   },
+                        //   icon: Icon(Icons.delete),
+                        // ),
+                        Column(
                           children: [
                             Container(
-                              padding: EdgeInsets.all(4),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(20),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.white,
-                                    spreadRadius: 1,
-                                    blurRadius: 10,
-                                  ),
-                                ],
-                              ),
+                              
                               child: IconButton(
                                 onPressed: () {
                                   controller.cart.value
@@ -165,18 +156,8 @@ class _CartPageState extends State<CartPage> {
                               ),
                             ),
                             Container(
-                              padding: EdgeInsets.all(4),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(20),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.white,
-                                    spreadRadius: 1,
-                                    blurRadius: 10,
-                                  ),
-                                ],
-                              ),
+                             
+                              
                               child: IconButton(
                                 onPressed: () {
                                   bool isMinus = (controller.cart.value
@@ -198,6 +179,8 @@ class _CartPageState extends State<CartPage> {
                                                 .selectedQuantity ??
                                             0) -
                                         1;
+                                  }else{
+                                    controller.cart.value.remove(product);
                                   }
 
                                   setState(() {});

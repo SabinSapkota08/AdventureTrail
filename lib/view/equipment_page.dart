@@ -2,18 +2,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp/model/product_model.dart';
 import 'package:fyp/utils/constants.dart';
+import 'package:fyp/view/equipmentDetail_page.dart';
 import 'package:get/get.dart';
 
-import 'at_post_screen.dart';
-
-class AdventureTickets extends StatefulWidget {
-  AdventureTickets({Key? key, required this.tickets}) : super(key: key);
-  List<Product> tickets;
+class EquipmentPage extends StatefulWidget {
+  EquipmentPage({Key? key, required this.products}) : super(key: key);
+  List<Product> products;
   @override
-  State<AdventureTickets> createState() => _AdventureTicketsState();
+  State<EquipmentPage> createState() => _EquipmentPageState();
 }
 
-class _AdventureTicketsState extends State<AdventureTickets> {
+class _EquipmentPageState extends State<EquipmentPage> {
   final List<String> _listItem = [
     'assets/images/background.png',
     'assets/images/bag.png',
@@ -26,13 +25,13 @@ class _AdventureTicketsState extends State<AdventureTickets> {
     'assets/images/bag.png',
   ];
 
-  List<Product> tickets = [];
+  List<Product> products = [];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    tickets = widget.tickets;
+    products = widget.products;
     setState(() {});
 
     // AdTicketController.get().then((value) {
@@ -60,7 +59,7 @@ class _AdventureTicketsState extends State<AdventureTickets> {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     image: DecorationImage(
-                        image: AssetImage('assets/images/mountain.png'),
+                        image: AssetImage('assets/images/equipment.png'),
                         fit: BoxFit.cover)),
                 child: Container(
                   decoration: BoxDecoration(
@@ -74,7 +73,7 @@ class _AdventureTicketsState extends State<AdventureTickets> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
                       Text(
-                        "Explore Adventure",
+                        "Grab Your Equipments",
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 35,
@@ -91,7 +90,7 @@ class _AdventureTicketsState extends State<AdventureTickets> {
                             color: Colors.white),
                         child: Center(
                             child: Text(
-                          "Buy Now",
+                          "Book Now",
                           style: TextStyle(
                               color: Colors.grey[900],
                               fontWeight: FontWeight.bold),
@@ -111,11 +110,11 @@ class _AdventureTicketsState extends State<AdventureTickets> {
                 child: Wrap(
                   runSpacing: 10,
                   spacing: 10,
-                  children: tickets.map((ticket) {
+                  children: products.map((product) {
                     return GestureDetector(
                       onTap: () {
-                        Get.to(AtPostScreen(
-                          adTicket: ticket,
+                        Get.to(EquipmentPostScreen(
+                          product: product,
                         ));
                       },
                       child: Column(
@@ -128,7 +127,7 @@ class _AdventureTicketsState extends State<AdventureTickets> {
                                   borderRadius: BorderRadius.circular(20),
                                   image: DecorationImage(
                                       image: NetworkImage(
-                                        "$baseUrl/public/${ticket.image}",
+                                        "$baseUrl/public/${product.image}",
                                       ),
                                       fit: BoxFit.cover)),
                               child: Transform.translate(
@@ -148,14 +147,14 @@ class _AdventureTicketsState extends State<AdventureTickets> {
                             ),
                           ),
                           Text(
-                            "${ticket.name}",
+                            "${product.name}",
                             style: TextStyle(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 16,
                                 color: Colors.black),
                           ),
                           Text(
-                            "Rs.${ticket.mrp}",
+                            "Rs.${product.mrp}",
                             style: TextStyle(color: Colors.blue),
                           ),
                         ],

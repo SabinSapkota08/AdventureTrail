@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
+
 class Products {
   int? currentPage;
   List<Product>? data;
@@ -11,6 +15,7 @@ class Products {
   String? prevPageUrl;
   int? to;
   int? total;
+  List? description_img = [];
 
   Products(
       {this.currentPage,
@@ -77,10 +82,15 @@ class Product {
   int? offerPrice;
   int? mrp;
   int? selectedQuantity;
+  DateTime? rentFrom;
+  DateTime? rentTo;
   int? quantity;
-  int? category;
+  Category? category;
+  List? description_img = [];
   String? createdAt;
+  String? type;
   String? updatedAt;
+  Vendor? vendor;
 
   Product(
       {this.id,
@@ -89,13 +99,17 @@ class Product {
       this.shortDescription,
       this.selectedQuantity = 1,
       this.image,
+      this.rentFrom,
+      this.rentTo,
       this.offerTo,
       this.offerFrom,
       this.offerPrice,
       this.mrp,
       this.quantity,
       this.category,
+      this.description_img,
       this.createdAt,
+      this.vendor,
       this.updatedAt});
 
   Product.fromJson(Map<String, dynamic> json) {
@@ -105,18 +119,28 @@ class Product {
     shortDescription = json['short_description'];
     image = json['image'];
     offerTo = json['offer_to'];
+       vendor =
+        json['vendor'] != null ? new Vendor.fromJson(json['vendor']) : null;
     offerFrom = json['offer_from'];
     offerPrice = json['offer_price'];
+    rentFrom = json['rent_from'];
+    rentTo = json['rent_to'];
+    description_img = json['description_img'] != null
+        ? jsonDecode(json['description_img']) as List
+        : null;
+    ;
 
     mrp = json['mrp'];
     quantity = json['quantity'];
-    category = json['category'];
+    type = json['type'];
+    category = null;
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     selectedQuantity = 1;
   }
 
   Map<String, dynamic> toJson() {
+
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['name'] = this.name;
@@ -126,13 +150,62 @@ class Product {
     data['offer_to'] = this.offerTo;
     data['offer_from'] = this.offerFrom;
     data['offer_price'] = this.offerPrice;
+    data['rent_from'] = this.rentFrom?.toIso8601String();
+    data['rent_to'] = this.rentTo?.toIso8601String();
+    data['description_img'] = this.description_img;
+
     data['product_amount'] = this.mrp;
+
     data['quantity'] = this.quantity;
-    data['category'] = this.category;
+    data['category'] = null;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
-    data['product_quantity'] = this.quantity;
-    data['product_amount'] = this.quantity;
+    data['product_quantity'] = this.selectedQuantity;
+    data['product_amount'] = this.mrp;
+
+    return data;
+  }
+}
+
+
+
+class Vendor {
+  int? id;
+  String? name;
+  String? email;
+  String? profilePic;
+  bool? active;
+  String? createdAt;
+  String? updatedAt;
+
+  Vendor(
+      {this.id,
+      this.name,
+      this.email,
+      this.profilePic,
+      this.active,
+      this.createdAt,
+      this.updatedAt});
+
+  Vendor.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    email = json['email'];
+    profilePic = json['profile_pic'];
+    active = json['active'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name'] = this.name;
+    data['email'] = this.email;
+    data['profile_pic'] = this.profilePic;
+    data['active'] = this.active;
+    data['created_at'] = this.createdAt;
+    data['updated_at'] = this.updatedAt;
     return data;
   }
 }

@@ -1,9 +1,14 @@
 // 1st you need to add an enumaration to represent your menus in the drawer
 import 'package:es_drawer_controller/main.dart';
 import 'package:flutter/material.dart';
+import 'package:fyp/view/aboutUs_page.dart';
+import 'package:fyp/view/changePassword_page.dart';
+import 'package:fyp/view/favourite_page.dart';
 import 'package:fyp/view/homepage.dart';
 import 'package:fyp/view/order_page.dart';
 import 'package:fyp/view/profile_page.dart';
+import 'package:fyp/view/splash_screen_page.dart';
+import 'package:get/get.dart';
 
 import 'cart_page.dart';
 
@@ -12,10 +17,12 @@ enum eDrawerIndex {
   diHome,
   diProfile,
   diCart,
+  diFavourite,
   diOrder,
-  diShare,
+  diChangePassword,
   diRateApp,
   diAboutUS,
+  diLogout,
 }
 
 // Now create a class for Navigation Drawer as below
@@ -42,6 +49,11 @@ class MainNavigation extends StatefulWidget {
 
     const ESDrawerItem(
         type: eDrawerItemType.ditMenu,
+        index: eDrawerIndex.diFavourite,
+        labelName: 'Favourite',
+        iconData: Icons.favorite_border_outlined),
+    const ESDrawerItem(
+        type: eDrawerItemType.ditMenu,
         index: eDrawerIndex.diOrder,
         labelName: 'Order',
         iconData: Icons.shopping_cart_sharp),
@@ -51,14 +63,21 @@ class MainNavigation extends StatefulWidget {
         index: eDrawerIndex.diDivider), // Add a divider here
     const ESDrawerItem(
         type: eDrawerItemType.ditLink,
-        index: eDrawerIndex.diShare,
-        labelName: 'Share',
-        iconData: Icons.share),
+        index: eDrawerIndex.diChangePassword,
+        labelName: 'Change Password',
+        iconData: Icons.password_outlined),
     const ESDrawerItem(
       type: eDrawerItemType.ditLink,
       index: eDrawerIndex.diAboutUS,
       labelName: 'About US',
       iconData: Icons.group,
+    ),
+
+    const ESDrawerItem(
+      type: eDrawerItemType.ditLink,
+      index: eDrawerIndex.diLogout,
+      labelName: 'Log out',
+      iconData: Icons.logout,
     ),
   ];
 
@@ -75,12 +94,11 @@ class _MainNavigationState extends State<MainNavigation> {
   @override
   Widget build(BuildContext context) {
     return ESDrawerController<eDrawerIndex>(
-      assetLogo: 'assets/mountain.png',
-      title: 'Test Application',
+      title: 'Adventrail Trail',
       subTitle: 'Customer',
       screenView: screenView,
       screenIndex: drawerIndex,
-
+      assetLogo: "assets/images/pn.png",
       drawerList: widget._cDrawerList,
       drawerWidth: MediaQuery.of(context).size.width * 0.5,
       // When user click on the menu, onDrawerCall is triggered
@@ -106,14 +124,21 @@ class _MainNavigationState extends State<MainNavigation> {
         setState(() => screenView = CartPage());
         break;
 
-      case eDrawerIndex.diOrder:
-        setState(() => screenView = OrderPage());
+      case eDrawerIndex.diFavourite:
+        setState(() => screenView = FavouritePage());
         break;
-      case eDrawerIndex.diShare:
-        setState(() => screenView = HomePage());
+
+      case eDrawerIndex.diOrder:
+        setState(() => screenView = MyOrdersPage());
+        break;
+      case eDrawerIndex.diChangePassword:
+        setState(() => screenView = ChangePasswordPage());
         break;
       case eDrawerIndex.diAboutUS:
-        setState(() => screenView = HomePage());
+        setState(() => screenView = AboutUsPage());
+        break;
+      case eDrawerIndex.diLogout:
+        Get.offAll(SplashScreen());
         break;
 
       default:

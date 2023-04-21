@@ -94,7 +94,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           children: [
                             Text("Sub total"),
                             Text(
-                                "Rs.${orderController.cart.value.fold(0, (previousValue, element) => (element.mrp ?? 0) + (int.parse(previousValue.toString())))}"),
+                                "Rs.${orderController.cart.value.fold(0, (previousValue, element) => (((element.mrp ?? 0) * (element.selectedQuantity ?? 0)) ?? 0) + (int.parse(previousValue.toString())))}"),
                           ],
                         ),
                         Row(
@@ -115,7 +115,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       children: [
                         Text("Total"),
                         Text(
-                            "Rs.${orderController.cart.value.fold(0, (previousValue, element) => (element.mrp ?? 0) + (int.parse(previousValue.toString()))) + 20}"),
+                            "Rs.${orderController.cart.value.fold(0, (previousValue, element) => (((element.mrp ?? 0) * (element.selectedQuantity ?? 0)) ?? 0) + (int.parse(previousValue.toString()))) + 20}"),
                       ],
                     )
                   ],
@@ -171,7 +171,22 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                     },
                                   ),
                                   ElevatedButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      order.OrderController().create(
+                                          order_date:
+                                              DateTime.now().toIso8601String(),
+                                          total_price:
+                                              orderController.cart.value.fold(
+                                                  0,
+                                                  (previousValue, element) =>
+                                                      (element.mrp ?? 0) +
+                                                      previousValue),
+                                          is_paid: true,
+                                          paid_by: "cash",
+                                          is_cancelled: false,
+                                          product: orderController.cart.value
+                                              .toList());
+                                    },
                                     child: Text(
                                       "cash on delivery",
                                       style: TextStyle(fontSize: 15),

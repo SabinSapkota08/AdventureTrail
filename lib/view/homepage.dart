@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:fyp/controller/product_controller.dart';
 import 'package:fyp/model/product_model.dart';
 import 'package:fyp/utils/constants.dart';
-import 'package:fyp/view/detail_page.dart';
+import 'package:fyp/view/equipmentDetail_page.dart';
+import 'package:fyp/view/equipment_page.dart';
+import 'package:fyp/view/notification_page.dart';
 //import 'package:get/get_core/src/get_main.dart';
 import 'package:fyp/view/product_category_model.dart';
-import 'package:fyp/view/search.dart';
 import 'package:get/get.dart';
 
 import 'adventure_package.dart';
@@ -23,14 +24,20 @@ class _HomePageState extends State<HomePage> {
   List<Product> products = [];
   void initState() {
     super.initState();
+    search();
+  }
 
-    ProductController().get().then((value) {
+  void search({String name = ""}) {
+    ProductController().get(name: name).then((value) {
       products = value?.data ?? [];
       setState(() {});
     });
   }
 
-  String selectedProduct = "equipment";
+  final TextEditingController _searchEditingController =
+      new TextEditingController();
+
+  String selectedProduct = "";
 
   @override
   Widget build(BuildContext context) {
@@ -51,42 +58,55 @@ class _HomePageState extends State<HomePage> {
                         "Location",
                         style: TextStyle(
                             fontWeight: FontWeight.normal,
-                            fontSize: 12.5,
+                            fontSize: 10.5,
                             color: Colors.grey),
                       ),
                       Text(
                         "Pokhara",
                         style: TextStyle(
                           fontWeight: FontWeight.w500,
-                          fontSize: 24,
+                          fontSize: 16,
                           color: Colors.black,
                         ),
                       ),
                     ],
                   ),
                   IconButton(
-                      onPressed: () {}, icon: Icon(Icons.notification_add)),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => NotificationPage(),
+                            ));
+                      },
+                      icon: Icon(Icons.notification_add)),
                 ],
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
               ),
+              SizedBox(
+                height: 10,
+              ),
               Column(
                 children: [
-                  Container(
-                    child: Padding(
-                      //padding: EdgeInsets.all(value)
-                      padding: EdgeInsets.fromLTRB(10, 15, 20, 5),
-                      child: IconButton(
+                  TextField(
+                    controller: _searchEditingController,
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 15),
+                      hintText: "Search",
+                      suffixIcon: IconButton(
+                        icon: Icon(Icons.search),
                         onPressed: () {
-                          // method to show the search bar
-                          showSearch(
-                              context: context,
-                              // delegate to customize the search bar
-                              delegate: CustomSearchDelegate());
+                          search(name: _searchEditingController.text);
                         },
-                        icon: const Icon(Icons.search),
+                      ),
+                      // prefix: Icon(Icons.search),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                        borderSide: const BorderSide(),
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
               Row(
@@ -106,6 +126,11 @@ class _HomePageState extends State<HomePage> {
                             selected: true,
                             onSelected: (a) {
                               selectedProduct = "equipment";
+                              Get.to(EquipmentPage(
+                                  products: products
+                                      .where((element) =>
+                                          element.type == "product")
+                                      .toList()));
                               setState(() {});
                             },
                             labelStyle: TextStyle(color: Colors.white),
@@ -126,8 +151,12 @@ class _HomePageState extends State<HomePage> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) =>
-                                        AdventurePackagePage(),
+                                    builder: (context) => AdventurePackagePage(
+                                      packages: products
+                                          .where((element) =>
+                                              element.type == "package")
+                                          .toList(),
+                                    ),
                                   ));
                               setState(() {});
                             },
@@ -141,7 +170,7 @@ class _HomePageState extends State<HomePage> {
                           width: (MediaQuery.of(context).size.width / 3) - 14,
                           child: ChoiceChip(
                             label: Text(
-                              "Adventure Tickets",
+                              "Tickets",
                             ),
                             selected: true,
                             onSelected: (a) {
@@ -149,7 +178,12 @@ class _HomePageState extends State<HomePage> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => AdventureTickets(),
+                                    builder: (context) => AdventureTickets(
+                                      tickets: products
+                                          .where((element) =>
+                                              element.type == "ticket")
+                                          .toList(),
+                                    ),
                                   ));
                               setState(() {});
                             },
@@ -183,8 +217,8 @@ class _HomePageState extends State<HomePage> {
                             child: Container(
                               child: CarouselSlider(
                                 options: CarouselOptions(
-                                  aspectRatio: 4,
-                                  viewportFraction: 0.9,
+                                  aspectRatio: 16 / 9,
+                                  viewportFraction: 0.8,
                                   enlargeStrategy:
                                       CenterPageEnlargeStrategy.zoom,
                                   // scrollDirection: Axis.vertical,
@@ -195,42 +229,6 @@ class _HomePageState extends State<HomePage> {
                                         ProductCarasoul(category: category))
                                     .toList(),
                               ),
-
-                              // width: 160,
-                              // padding: EdgeInsets.all(20),
-                              // margin: EdgeInsets.only(left: 15),
-                              // decoration: BoxDecoration(
-                              //   color: Colors.black,
-                              //   borderRadius: BorderRadius.circular(15),
-                              //   image: DecorationImage(
-                              //       image: AssetImage("assets/images/hike.png"),
-                              //       fit: BoxFit.cover,
-                              //       opacity: 0.7),
-                              // ),
-                              // child: Column(
-                              //   children: [
-                              //     Container(
-                              //       alignment: Alignment.topRight,
-                              //       child: Icon(
-                              //         Icons.bookmark_add_outlined,
-                              //         color: Colors.white,
-                              //         size: 30,
-                              //       ),
-                              //     ),
-                              //     Spacer(),
-                              //     Container(
-                              //       alignment: Alignment.bottomLeft,
-                              //       child: Text(
-                              //         "Trekking Bag",
-                              //         style: TextStyle(
-                              //           color: Colors.white,
-                              //           fontSize: 18,
-                              //           fontWeight: FontWeight.w600,
-                              //         ),
-                              //       ),
-                              //     )
-                              //   ],
-                              // ),
                             ),
                           );
                         },
@@ -249,74 +247,80 @@ class _HomePageState extends State<HomePage> {
                     "Best for you",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
-                  TextButton(
-                    onPressed: () {},
-                    child: const Text(
-                      "See more ",
-                      style: TextStyle(
-                        fontWeight: FontWeight.normal,
-                        fontSize: 12.83,
-                      ),
-                    ),
-                  ),
                 ],
               ),
               Column(
                 children: [
                   SizedBox(
-                    child: Column(
-                      children: this.products.map((product) {
-                        return GestureDetector(
-                          onTap: () {
-                            Get.to(ProductDetailPage(
-                              product: product,
-                            ));
-                          },
-                          child: Container(
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  height: 95,
-                                  width: 140,
-                                  margin: EdgeInsets.only(top: 10),
-                                  decoration: BoxDecoration(
-                                      color: Colors.red,
-                                      borderRadius: BorderRadius.circular(18),
-                                      image: DecorationImage(
-                                          fit: BoxFit.fill,
-                                          image: NetworkImage(
-                                              "$baseUrl/public/${product.image}"))),
-                                ),
-                                SizedBox(
-                                  width: 50,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "${product.name} ",
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 17.1,
+                    child: this
+                            .products
+                            .where((element) => element.type == "product")
+                            .isNotEmpty
+                        ? Column(
+                            children: this
+                                .products
+                                .where((element) => element.type == "product")
+                                .toList()
+                                .map((product) {
+                              return GestureDetector(
+                                onTap: () {
+                                  Get.to(EquipmentPostScreen(
+                                    product: product,
+                                  ));
+                                },
+                                child: Container(
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        height: 95,
+                                        width: 140,
+                                        margin: EdgeInsets.only(top: 10),
+                                        decoration: BoxDecoration(
+                                            color: Colors.red,
+                                            borderRadius:
+                                                BorderRadius.circular(18),
+                                            image: DecorationImage(
+                                                fit: BoxFit.fill,
+                                                image: NetworkImage(
+                                                    "$baseUrl/public/${product.image}"))),
                                       ),
-                                    ),
-                                    Text(
-                                      "Rs. ${product.mrp}",
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.normal,
-                                        color: Color(0xfff0A8ED9),
-                                        fontSize: 12.83,
+                                      SizedBox(
+                                        width: 50,
                                       ),
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "${product.name} ",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 17.1,
+                                            ),
+                                          ),
+                                          Text(
+                                            "Rs. ${product.mrp}",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.normal,
+                                              color: Color(0xfff0A8ED9),
+                                              fontSize: 12.83,
+                                            ),
+                                          )
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          )
+                        : Text(
+                            "Not found",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w300, fontSize: 18),
                           ),
-                        );
-                      }).toList(),
-                    ),
                   ),
                 ],
               ),
@@ -376,6 +380,82 @@ class ProductCarasoul extends StatelessWidget {
               ),
             ],
           )),
+    );
+  }
+}
+
+class DataSearch extends SearchDelegate<String> {
+  final products = ["Tent", "Sleeping_Bag", "Bag", "Trekking-poles"];
+  final recentProducts = ["Sleeping_Bag", "Bag"];
+  @override
+  List<Widget>? buildActions(BuildContext context) {
+    return [
+      IconButton(
+          onPressed: () {
+            query = "";
+          },
+          icon: Icon(Icons.clear))
+    ];
+  }
+
+  @override
+  Widget? buildLeading(BuildContext context) {
+    return IconButton(
+      icon: AnimatedIcon(
+        icon: AnimatedIcons.menu_arrow,
+        progress: transitionAnimation,
+      ),
+      onPressed: () {
+        close(context, toString());
+      },
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return Center(
+      child: Container(
+        height: 100,
+        width: 100.0,
+        child: Card(
+          color: Colors.red,
+          child: Center(
+            child: Text(query),
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    final suggestionList = query.isEmpty
+        ? recentProducts
+        : products.where((p) => p.startsWith(query)).toList();
+    return ListView.builder(
+      itemBuilder: (context, index) => ListTile(
+        onTap: () {
+          showResults(context);
+        },
+        leading: Icon(Icons.card_travel),
+        title: RichText(
+          text: TextSpan(
+              text: suggestionList[index].substring(0, query.length),
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+              children: [
+                TextSpan(
+                  text: suggestionList[index].substring(query.length),
+                  style: TextStyle(
+                    color: Colors.grey,
+                  ),
+                )
+              ]),
+        ),
+      ),
+      itemCount: suggestionList.length,
     );
   }
 }

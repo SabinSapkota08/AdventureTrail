@@ -16,9 +16,8 @@ class LoginController extends GetxController {
   Future<User?> login(
       String username, String password, BuildContext context) async {
     var url = Uri.parse('$baseUrl/public/api/login');
-    
+
     var response = await http.post(url,
-   
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
@@ -63,7 +62,8 @@ class LoginController extends GetxController {
       required String name,
       required String confirm_password,
       required String phone_number}) async {
-    var url = Uri.parse('http://localhost/adventureTrail/public/api/register');
+    var url =
+        Uri.parse('http://localhost:90/adventureTrail/public/api/register');
     var response = await http.post(url,
         headers: {
           'Accept': 'application/json',

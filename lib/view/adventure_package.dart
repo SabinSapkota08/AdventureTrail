@@ -1,14 +1,14 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:fyp/controller/adventure_packages_controller.dart';
-import 'package:fyp/model/adventure_packages_model.dart';
+import 'package:fyp/model/product_model.dart';
 import 'package:fyp/utils/constants.dart';
 import 'package:fyp/view/adPackage_category_model.dart';
 
 import 'ad_post_screen.dart';
 
 class AdventurePackagePage extends StatefulWidget {
-  const AdventurePackagePage({super.key});
+  AdventurePackagePage({super.key, required this.packages});
+  List<Product> packages;
 
   @override
   State<AdventurePackagePage> createState() => _AdventurePackagePageState();
@@ -16,26 +16,14 @@ class AdventurePackagePage extends StatefulWidget {
 
 class _AdventurePackagePageState extends State<AdventurePackagePage> {
   @override
-  List<AdPackage> packages = [];
+  List<Product> packages = [];
 
   void initState() {
     super.initState();
-    AdventurePackageController().get().then((value) {
-      packages = value?.packages ?? [];
-      print(packages.length);
-      setState(() {});
-    });
+    packages = widget.packages;
   }
 
   Widget build(BuildContext context) {
-    var category = [
-      'Best Places',
-      'Most Visited',
-      'Favourites',
-      'New Added',
-      'Company',
-    ];
-
     return Scaffold(
       appBar: AppBar(
         title: Text(""),
@@ -48,37 +36,21 @@ class _AdventurePackagePageState extends State<AdventurePackagePage> {
                 Expanded(
                   child: Container(
                     height: 200,
-                    child: ListView.builder(
-                      itemCount: 6,
-                      scrollDirection: Axis.horizontal,
-                      shrinkWrap: true,
-                      itemBuilder: (BuildContext context, int index) {
-                        return InkWell(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => AdPostScreen(
-                                        adPackage: packages[index],
-                                      )),
-                            );
-                          },
-                          child: Container(
-                              child: CarouselSlider(
-                            options: CarouselOptions(
-                              aspectRatio: 4,
-                              viewportFraction: 0.9,
-                              enlargeStrategy: CenterPageEnlargeStrategy.zoom,
-                              // scrollDirection: Axis.vertical,
-                              autoPlay: true,
-                            ),
-                            items: Category.categories
-                                .map((category) =>
-                                    AdPackageCarasoul(category: category))
-                                .toList(),
-                          )),
-                        );
-                      },
+                    child: InkWell(
+                      child: Container(
+                          child: CarouselSlider(
+                        options: CarouselOptions(
+                          aspectRatio: 16 / 12,
+                          viewportFraction: 0.9,
+                          enlargeStrategy: CenterPageEnlargeStrategy.zoom,
+                          // scrollDirection: Axis.vertical,
+                          autoPlay: true,
+                        ),
+                        items: Category.categories
+                            .map((category) =>
+                                AdPackageCarasoul(category: category))
+                            .toList(),
+                      )),
                     ),
                   ),
                 ),
@@ -90,31 +62,15 @@ class _AdventurePackagePageState extends State<AdventurePackagePage> {
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Padding(
-                padding: EdgeInsets.all(8),
+                padding: EdgeInsets.all(2),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    for (int i = 0; i < 5; i++)
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: 10),
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black,
-                              blurRadius: 4,
-                            ),
-                          ],
-                        ),
-                        child: Text(
-                          category[i],
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      )
+                    const Text(
+                      "Book Now",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    ),
                   ],
                 ),
               ),
@@ -183,7 +139,7 @@ class _AdventurePackagePageState extends State<AdventurePackagePage> {
                       Row(
                         children: [
                           Text(
-                            "Rs.${packages[index].price}",
+                            "Rs.${packages[index].mrp}",
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
                               color: Colors.blue,

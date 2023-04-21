@@ -1,24 +1,49 @@
 import 'dart:io';
 
+//import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+//import 'package:dlogin/signup.dart';
+//import 'package:dlogin/homepage.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fyp/state/order_controller.dart';
 //import 'package:fyp/view/home.dart';
 import 'package:fyp/view/homepage.dart';
-import 'package:fyp/view/login.dart';
-import 'package:fyp/view/signup.dart';
-import 'package:fyp/view/splash.dart';
+import 'package:fyp/view/login_page.dart';
+import 'package:fyp/view/signUp_page.dart';
+import 'package:fyp/view/splash_screen_page.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:khalti_flutter/khalti_flutter.dart';
-//import 'package:dlogin/signup.dart';
-//import 'package:dlogin/homepage.dart';
 
-void main() {
+void main() async {
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+
+  WidgetsFlutterBinding.ensureInitialized();
+  var initializationSettingsAndroid =
+      AndroidInitializationSettings('@mipmap/ic_launcher');
+  var initializationSettingsIOS = IOSInitializationSettings();
+  var initializationSettings = InitializationSettings(
+      android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+  flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  await flutterLocalNotificationsPlugin.initialize(
+    initializationSettings,
+  );
+
+  WidgetsFlutterBinding.ensureInitialized();
+  // await Firebase.initializeApp();
+
   HttpOverrides.global = MyHttpOverrides();
 
   Get.put(ProductStateController());
-  ;
+
+  // clear();
   runApp(const MyApp());
+}
+
+Future<void> clear() async {
+  final storage = new FlutterSecureStorage();
+  await storage.delete(key: "token");
 }
 
 class MyApp extends StatelessWidget {
@@ -39,10 +64,10 @@ class MyApp extends StatelessWidget {
             localizationsDelegates: const [
               KhaltiLocalizations.delegate,
             ],
-            home: const SplashPage(),
+            home: SplashScreen(),
             routes: {
-              'signup': (context) => const SignUpPage(),
-              'login': (context) => const LoginPage(),
+              'register': (context) => const MyRegister(),
+              'login': (context) => const MyLogin(),
               '/homepage': (context) => const HomePage(),
             },
           );

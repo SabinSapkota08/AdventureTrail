@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:fyp/model/adventure_packages_model.dart';
+import 'package:fyp/model/product_model.dart';
+import 'package:fyp/state/order_controller.dart';
+import 'package:get/get.dart';
 
 class AdPostAppBar extends StatefulWidget {
   AdPostAppBar({Key? key, required this.adPackage}) : super(key: key);
-  AdPackage adPackage;
+  Product adPackage;
 
   @override
   State<AdPostAppBar> createState() => _AdPostAppBarState();
 }
 
 class _AdPostAppBarState extends State<AdPostAppBar> {
+  final orderController = Get.find<ProductStateController>();
+
   void initState() {
     // darkMode = true;
     super.initState();
@@ -46,7 +50,17 @@ class _AdPostAppBarState extends State<AdPostAppBar> {
             ),
           ),
           InkWell(
-            onTap: () {},
+            onTap: () {
+              if (orderController.favourite.value
+                  .where((element) => element.id == widget.adPackage.id)
+                  .isEmpty) {
+                orderController.favourite.value.add(widget.adPackage);
+              } else {
+                orderController.favourite.value.remove(widget.adPackage);
+              }
+              orderController.favourite.refresh();
+              setState(() {});
+            },
             child: Container(
               padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
@@ -59,11 +73,23 @@ class _AdPostAppBarState extends State<AdPostAppBar> {
                   ),
                 ],
               ),
-              child: IconButton(
-                color: Colors.red,
-                onPressed: changeFavourite,
-                icon: Icon(
-                  isFavourite ? Icons.favorite : Icons.favorite_outline,
+              child: Container(
+                height: 29.93,
+                width: 29.93,
+                child: Center(
+                  child: Icon(
+                    Icons.favorite,
+                    //  size: 12.83,
+                    color: orderController.favourite.value
+                            .where(
+                                (element) => element.id == widget.adPackage.id)
+                            .isEmpty
+                        ? Colors.black
+                        : Colors.red,
+                  ),
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5.34),
                 ),
               ),
             ),

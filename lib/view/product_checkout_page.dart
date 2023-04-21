@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:fyp/controller/order_controller.dart' as order;
 import 'package:fyp/state/order_controller.dart';
+import 'package:fyp/view/navigation_page.dart';
 import 'package:get/get.dart';
 import 'package:khalti_flutter/khalti_flutter.dart';
 
@@ -31,168 +33,224 @@ class _ProductCheckoutPageState extends State<ProductCheckoutPage> {
       appBar: AppBar(
         title: Text('Product Checkout'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Shipping Information',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 16),
-            TextFormField(
-              decoration: InputDecoration(
-                labelText: 'Full Name',
-                border: OutlineInputBorder(),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Shipping Information',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
-            ),
-            SizedBox(height: 16),
-            TextFormField(
-              decoration: InputDecoration(
-                labelText: 'Address',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(height: 16),
-            TextFormField(
-              decoration: InputDecoration(
-                labelText: 'City',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(height: 16),
-            TextFormField(
-              decoration: InputDecoration(
-                labelText: 'Postal Code',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(height: 32),
-            Center(
-              child: Container(
-                width: MediaQuery.of(context).size.width * 0.96,
-                padding: EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                  borderRadius: BorderRadius.circular(20),
+              SizedBox(height: 16),
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'Full Name',
+                  border: OutlineInputBorder(),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Summary",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 18,
+              ),
+              SizedBox(height: 16),
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'Address',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              SizedBox(height: 16),
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'City',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              SizedBox(height: 16),
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'Postal Code',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              SizedBox(height: 32),
+              Center(
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 0.96,
+                  padding: EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Summary",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontSize: 18,
+                        ),
                       ),
-                    ),
-                    Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("Sub total"),
-                            Text(
-                                "Rs.${orderController.cart.value.fold(0, (previousValue, element) => (element.mrp ?? 0) + (int.parse(previousValue.toString())))}"),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("Delivery Charge:"),
-                            Text("Rs.${20}")
-                          ],
-                        ),
-                      ],
-                    ),
-                    Divider(
-                      height: 20,
-                      thickness: 3,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("Total"),
-                        Text(
-                            "Rs.${orderController.cart.value.fold(0, (previousValue, element) => (element.mrp ?? 0) + (int.parse(previousValue.toString()))) + 20}"),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Text(
-              "Note :All the documents related customers are taken before renting like photo copies of citizen ship certificate.",
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 32),
-            ElevatedButton(
-              onPressed: () {
-                showDialog(
-                    context: context,
-                    builder: (e) {
-                      return AlertDialog(
-                        title: Text("Select Payment method:"),
-                        content: SizedBox(
-                          height: 70,
-                          child: Column(
+                      Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Wrap(
-                                spacing: 10,
-                                runSpacing: 10,
-                                children: [
-                                  KhaltiButton(
-                                    label: "Pay with khalti",
-                                    config: config,
-                                    preferences: [
-                                      // Not providing this will enable all the payment methods.
-                                      PaymentPreference.khalti,
-                                      PaymentPreference.eBanking,
-                                    ],
-                                    onSuccess: (successModel) {
-                                      order.OrderController().create(
-                                          order_date:
-                                              DateTime.now().toIso8601String(),
-                                          total_price:
-                                              orderController.cart.value.fold(
-                                                  0,
-                                                  (previousValue, element) =>
-                                                      (element.mrp ?? 0) +
-                                                      previousValue),
-                                          is_paid: true,
-                                          paid_by: "khalti",
-                                          is_cancelled: false,
-                                          product: orderController.cart.value
-                                              .toList());
-                                      // Perform Server Verification
-                                    },
-                                    onFailure: (failureModel) {
-                                      // What to do on failure?
-                                    },
-                                    onCancel: () {
-                                      // User manually cancelled the transaction
-                                    },
-                                  ),
-                                  ElevatedButton(
-                                    onPressed: () {},
-                                    child: Text(
-                                      "cash on delivery",
-                                      style: TextStyle(fontSize: 15),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                              Text("Sub total"),
+                              Text(
+                                  "Rs.${orderController.cart.value.fold(0, (previousValue, element) => (element.mrp ?? 0) + (int.parse(previousValue.toString())))}"),
                             ],
                           ),
-                        ),
-                      );
-                    });
-              },
-              child: Text('Place Order'),
-            ),
-          ],
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("Delivery Charge:"),
+                              Text("Rs.${20}")
+                            ],
+                          ),
+                        ],
+                      ),
+                      Divider(
+                        height: 20,
+                        thickness: 3,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("Total"),
+                          Text(
+                              "Rs.${orderController.cart.value.fold(0, (previousValue, element) => (element.mrp ?? 0) + (int.parse(previousValue.toString()))) + 20}"),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Text(
+                "Note :All the documents related customers are taken before renting like photo copies of citizen ship certificate.",
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 32),
+              ElevatedButton(
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (e) {
+                        return AlertDialog(
+                          title: Text("Select Payment method:"),
+                          content: SizedBox(
+                            height: 120,
+                            child: Column(
+                              children: [
+                                Wrap(
+                                  spacing: 10,
+                                  runSpacing: 10,
+                                  children: [
+                                    KhaltiButton(
+                                      label: "Pay with khalti",
+                                      config: config,
+                                      preferences: [
+                                        // Not providing this will enable all the payment methods.
+                                        PaymentPreference.khalti,
+                                        PaymentPreference.eBanking,
+                                      ],
+                                      onSuccess: (successModel) {
+                                        order.OrderController()
+                                            .create(
+                                                order_date: DateTime.now()
+                                                    .toIso8601String(),
+                                                total_price: orderController
+                                                    .cart.value
+                                                    .fold(
+                                                        0,
+                                                        (previousValue,
+                                                                element) =>
+                                                            (element.mrp ?? 0) +
+                                                            previousValue),
+                                                is_paid: true,
+                                                paid_by: "khalti",
+                                                is_cancelled: false,
+                                                product: orderController
+                                                    .cart.value
+                                                    .toList())
+                                            .then((value) {
+                                          if (value) {
+                                            Fluttertoast.showToast(
+                                                msg:
+                                                    "This is Center Short Toast",
+                                                toastLength: Toast.LENGTH_SHORT,
+                                                gravity: ToastGravity.CENTER,
+                                                timeInSecForIosWeb: 5,
+                                                backgroundColor: Colors.red,
+                                                textColor: Colors.white,
+                                                fontSize: 16.0);
+                                            Get.back();
+                                          }
+                                        });
+                                        // Perform Server Verification
+                                      },
+                                      onFailure: (failureModel) {
+                                        // What to do on failure?
+                                      },
+                                      onCancel: () {
+                                        // User manually cancelled the transaction
+                                      },
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        print("ok");
+                                        order.OrderController()
+                                            .create(
+                                                order_date:
+                                                    DateTime.now().toString(),
+                                                total_price: orderController
+                                                    .cart.value
+                                                    .fold(
+                                                        0,
+                                                        (previousValue,
+                                                                element) =>
+                                                            (element.mrp ?? 0) +
+                                                            previousValue),
+                                                is_paid: false,
+                                                paid_by: "cash",
+                                                is_cancelled: false,
+                                                product: orderController
+                                                    .cart.value
+                                                    .toList())
+                                            .then((value) {
+                                          if (value) {
+                                            AlertDialog alert = AlertDialog(
+                                              title: Text("My title"),
+                                              content:
+                                                  Text("This is my message."),
+                                              actions: [
+                                                TextButton(
+                                                  child: Text("OK"),
+                                                  onPressed: () {},
+                                                )
+                                              ],
+                                            );
+                                            Get.off(MainNavigation());
+                                          }
+                                        });
+                                      },
+                                      child: Text(
+                                        "cash on delivery",
+                                        style: TextStyle(fontSize: 15),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      });
+                },
+                child: Text('Place Order'),
+              ),
+            ],
+          ),
         ),
       ),
     );

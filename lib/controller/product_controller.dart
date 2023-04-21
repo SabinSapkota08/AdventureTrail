@@ -1,13 +1,13 @@
 import 'dart:convert';
 
 import 'package:fyp/model/product_model.dart';
+import 'package:fyp/utils/constants.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:fyp/utils/constants.dart';
 
 class ProductController extends GetxController {
-  Future<Products?> get() async {
-    var url = Uri.parse('$baseUrl/public/api/products');  
+  Future<Products?> get({String name = ""}) async {
+    var url = Uri.parse('$baseUrl/public/api/products?name=$name');
     var response = await http.get(
       url,
       headers: {
@@ -15,6 +15,7 @@ class ProductController extends GetxController {
         'Content-Type': 'application/json'
       },
     );
+    print(response.body);
 
     if (response.statusCode == 200) {
       Products products =

@@ -48,6 +48,9 @@ dependencies:
   carousel_slider: ^4.2.1
   equatable: ^2.0.5
   khalti_flutter:
+  flutter_local_notifications: ^8.2.0
+#  firebase_core: ^2.9.0
+#  firebase_messaging: ^14.4.0
 
 
 dev_dependencies:
@@ -78,6 +81,11 @@ flutter:
     - assets/images/background.png
     - assets/images/hike.png
     - assets/images/bag.png
+    - assets/images/pn.png
+    - assets/images/logo-black.png
+    - assets/images/logo-white.png
+    - assets/images/logo-color.png
+    - assets/images/equipment.png
 
 
 

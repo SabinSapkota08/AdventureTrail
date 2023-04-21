@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 //import 'package:dlogin/login.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fyp/view/homepage.dart';
+import 'package:fyp/view/login.dart';
 import 'package:get/get.dart';
 
 
@@ -85,7 +86,7 @@ class _SignUpPageState extends State<SignUpPage>{
                 if (_formKey.currentState!.validate()){
                   LoginController().register(email: emailController.text, password: passwordController.text, name: nameController.text, confirm_password: passwordController.text, phone_number: phoneController.text).then((value) {
                     if(value != null){
-                      Get.off(HomePage());
+                      Get.off(LoginPage());
 
 
                     }
